@@ -4,7 +4,7 @@ Code to reproduce the numbers, the comparison table and the charts for Elly Okin
 
 Finland has the highest unemployment rate in the EU, yet its employment rate is close to the EU average. The two rates use different denominators (the labour force against the whole population), and Finland has a large labour force share, including many students who look for work and count as unemployed. This repository fetches the public data behind that comparison.
 
-The repository holds code only. No data files are committed: the script downloads the data from the Eurostat and Statistics Finland APIs each time it runs (and caches the responses in `data/`, which is git-ignored). No API keys needed. The script needs only a plain folder copy of the repository (no git).
+The repository holds code only. No data files are committed: the script downloads the data from the Eurostat and Statistics Finland APIs each time it runs and caches the responses outside the project folder (see [Where things live](#where-things-live)). No API keys needed. The script needs only a plain folder copy of the repository (no git).
 
 ## What it reproduces
 
@@ -20,31 +20,33 @@ The repository holds code only. No data files are committed: the script download
    - T1: the Nordic comparison table
 3. **Chart** four figures.
 
-## Setup and run
+## Where things live
 
-Requires Python 3.11 or newer. The virtual environment lives **outside** the project folder (the project folder can sit in a synced folder such as Google Drive), and is deleted after the run.
+- **Code:** this repo. The project folder needs only the scripts, this README, `requirements.txt`, `clean.ps1` and `LICENSE`; the run adds `outputs/`.
+- **Virtual environment:** `%LOCALAPPDATA%\venvs\finland-unemployment-paradox`, outside the project folder. If you keep the project in a cloud-synced folder, keep `.git`, the venv and the data cache out of it: sync can corrupt git and small-file trees.
+- **Download cache:** `%LOCALAPPDATA%\project-data\finland-unemployment-paradox\raw\` (on macOS/Linux `~/.cache/project-data/finland-unemployment-paradox/raw/`; set `FUP_DATA_DIR` to override).
 
-**Windows (PowerShell)**, from inside the project folder:
+## Run (Windows PowerShell)
 
-    $venv = "$env:LOCALAPPDATA\venvs\finland-unemployment-paradox"
-    py -m venv $venv
-    & "$venv\Scripts\python.exe" -m pip install -r requirements.txt
-    & "$venv\Scripts\python.exe" unemployment_paradox.py
-    powershell -ExecutionPolicy Bypass -File .\clean.ps1
+Requires Python 3.11 or newer (the `py` launcher). From the project folder:
 
-**macOS / Linux (Terminal)**, from inside the project folder:
+    cd path\to\finland-unemployment-paradox
+    py -m venv $env:LOCALAPPDATA\venvs\finland-unemployment-paradox
+    & $env:LOCALAPPDATA\venvs\finland-unemployment-paradox\Scripts\python -m pip install -r requirements.txt
+    & $env:LOCALAPPDATA\venvs\finland-unemployment-paradox\Scripts\python unemployment_paradox.py
+    .\clean.ps1
 
-    venv="$HOME/.venvs/finland-unemployment-paradox"
-    python3 -m venv "$venv"
-    "$venv/bin/python" -m pip install -r requirements.txt
-    "$venv/bin/python" unemployment_paradox.py
-    rm -rf "$venv" data __pycache__
+Delete the venv after the run to save space: the last line removes it and the download cache (see [Clean up](#clean-up-after-a-run)). To rebuild the venv in one line: `py -m venv $env:LOCALAPPDATA\venvs\finland-unemployment-paradox; & $env:LOCALAPPDATA\venvs\finland-unemployment-paradox\Scripts\pip install -r requirements.txt`
 
-**Rebuild the venv later (one line, Windows):** `py -m venv $env:LOCALAPPDATA\venvs\finland-unemployment-paradox; & "$env:LOCALAPPDATA\venvs\finland-unemployment-paradox\Scripts\python.exe" -m pip install -r requirements.txt`
+A run downloads eight small API responses (well under 1 MB) and takes under a minute. If the cache is still there, later runs reuse it and take a few seconds; add `--refresh` to download again.
 
-The run takes under a minute. Later runs reuse the cached API responses in `data/raw/` (if you kept them) and take a few seconds; add `--refresh` to download them again.
+## Run (macOS / Linux)
 
-**Cleaning up.** `clean.ps1` removes the venv at `%LOCALAPPDATA%\venvs\finland-unemployment-paradox`, any `.venv` in the project folder, `__pycache__`, `.pytest_cache` and other tool caches, and the `data/` download cache. It keeps `outputs/`. Options: `-KeepData` keeps the download cache; `-IncludeOutputs` also deletes `outputs/`.
+    cd path/to/finland-unemployment-paradox
+    python3 -m venv ~/.cache/venvs/finland-unemployment-paradox
+    ~/.cache/venvs/finland-unemployment-paradox/bin/python -m pip install -r requirements.txt
+    ~/.cache/venvs/finland-unemployment-paradox/bin/python unemployment_paradox.py
+    rm -rf ~/.cache/venvs/finland-unemployment-paradox ~/.cache/project-data/finland-unemployment-paradox
 
 ## Outputs (created next to the script)
 
@@ -66,7 +68,17 @@ Tables in `outputs/`:
 - `fi_eurostat_vs_statfin.csv`: Finland's monthly unemployment rate in both sources, trend and seasonally adjusted, with differences
 - `eurostat_flags.csv`: every downloaded Eurostat value that carries a flag (break in series, definition differs, low reliability)
 
+Outputs are never committed.
+
 Every chart's footer reads "Source: Eurostat (dataset codes); author's calculations."
+
+## Clean up (after a run)
+
+`clean.ps1` frees disk space after a run. It deletes the venv (`%LOCALAPPDATA%\venvs\finland-unemployment-paradox`), the download cache (`%LOCALAPPDATA%\project-data\finland-unemployment-paradox`) and any `.venv`, `__pycache__`, `.pytest_cache`, `.mypy_cache`, `.ruff_cache`, `.ipynb_checkpoints` or `data/` inside the project folder. It keeps `outputs/` and never touches files tracked by git. It prints the MB freed and is safe to rerun. From the project folder in PowerShell:
+
+    .\clean.ps1
+
+(Add `-DryRun` to see what would be removed without deleting anything. If script execution is blocked, use `powershell -ExecutionPolicy Bypass -File .\clean.ps1`.)
 
 ## Method notes
 

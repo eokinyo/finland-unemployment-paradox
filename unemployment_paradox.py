@@ -7,7 +7,7 @@ Finland's unemployment rate and employment rate (October 2026).
 
 Three steps, run in order by main():
   1. download  - query the Eurostat and Statistics Finland (StatFin) APIs
-                 (responses cached in data/raw/, git-ignored)
+                 (responses cached outside the project folder, see DATA_DIR)
   2. analyse   - headline numbers N1-N14, Nordic table T1, youth/student split
                  (CSVs and a Markdown table in outputs/)
   3. charts    - four charts, PNG and SVG (outputs/charts/)
@@ -24,6 +24,7 @@ from __future__ import annotations
 import hashlib
 import itertools
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -67,7 +68,23 @@ STATFIN_API = "https://pxdata.stat.fi/PxWeb/api/v1/en/StatFin/tyti/"
 SRC_ES = "Source: Eurostat ({}); author's calculations."
 
 BASE_DIR = Path(__file__).resolve().parent
-RAW_DIR = BASE_DIR / "data" / "raw"
+PROJECT = "finland-unemployment-paradox"
+
+
+def _data_dir() -> Path:
+    """Download cache, kept outside the project folder (so a synced project folder stays small).
+
+    FUP_DATA_DIR overrides it. Default: %LOCALAPPDATA%\\project-data\\<project> on Windows,
+    ~/.cache/project-data/<project> elsewhere. clean.ps1 deletes it after a run.
+    """
+    if os.environ.get("FUP_DATA_DIR"):
+        return Path(os.environ["FUP_DATA_DIR"])
+    base = os.environ.get("LOCALAPPDATA") or os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache"
+    return Path(base) / "project-data" / PROJECT
+
+
+DATA_DIR = _data_dir()
+RAW_DIR = DATA_DIR / "raw"
 OUT_DIR = BASE_DIR / "outputs"
 CHART_DIR = OUT_DIR / "charts"
 
@@ -80,7 +97,7 @@ USER_AGENT = "finland-unemployment-paradox/1.0 (+python-requests)"
 # Step 1: download
 # --------------------------------------------------------------------------- #
 def _cached(name: str, key: object, fetch, refresh: bool) -> dict:
-    """Return a JSON response from data/raw/ or fetch it (with retries) and cache it."""
+    """Return a JSON response from RAW_DIR or fetch it (with retries) and cache it."""
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     digest = hashlib.sha1(json.dumps(key, sort_keys=True).encode()).hexdigest()[:10]
     path = RAW_DIR / f"{name}_{digest}.json"
