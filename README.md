@@ -70,7 +70,7 @@ Tables in `outputs/`:
 
 Outputs are never committed.
 
-Every chart's footer reads "Source: Eurostat (dataset codes); author's calculations."
+Every chart's footer reads "Source: Eurostat; author's calculations.", with the adjustment or frequency in brackets where relevant (for example "Source: Eurostat (seasonally adjusted, quarterly); author's calculations."). Dataset codes are listed under [Data sources](#data-sources), not on the charts.
 
 ## Clean up (after a run)
 

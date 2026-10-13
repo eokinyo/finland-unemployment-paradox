@@ -65,7 +65,7 @@ NORDIC = {"FI": ("Finland", "#c0392b"), "SE": ("Sweden", "#1f77b4"),
 EUROSTAT_API = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/"
 STATFIN_API = "https://pxdata.stat.fi/PxWeb/api/v1/en/StatFin/tyti/"
 
-SRC_ES = "Source: Eurostat ({}); author's calculations."
+SRC_ES = "Source: Eurostat{}; author's calculations."  # no dataset codes on the charts (#29)
 
 BASE_DIR = Path(__file__).resolve().parent
 PROJECT = "finland-unemployment-paradox"
@@ -531,7 +531,7 @@ def chart_scatter(r: dict, path: Path):
     ax.set_title(f"Unemployment rate vs employment rate, EU members, {QUARTER.replace('-', ' ')}",
                  loc="left")
     ax.legend(loc="lower left")
-    finish(fig, ax, path, SRC_ES.format("une_rt_q, lfsi_emp_q; seasonally adjusted"),
+    finish(fig, ax, path, SRC_ES.format(" (seasonally adjusted, quarterly)"),
            note="Country codes: Eurostat (EL = Greece). Both rates seasonally adjusted, quarterly.",
            offset=-36)
 
@@ -566,7 +566,7 @@ def chart_lines(r: dict, path: Path):
     last = pd.Period(MONTH, "M").strftime("%b %Y")
     ax.set_title(f"Unemployment rate: Finland, Sweden, Denmark and the EU, {first} to {last}",
                  loc="left")
-    finish(fig, ax, path, SRC_ES.format("une_rt_m"),
+    finish(fig, ax, path, SRC_ES.format(""),
            note="Solid lines: seasonally adjusted. Eurostat's monthly release uses the trend series "
                 "for Finland and Sweden (Sweden's trend not shown).")
 
@@ -599,7 +599,7 @@ def chart_employment_activity(r: dict, path: Path):
                  f"({START_QUARTER.replace('-', ' ')} to {QUARTER.replace('-', ' ')})",
                  x=0.075, ha="left", fontsize=13, fontweight="bold")
     fig.subplots_adjust(wspace=0.18)
-    finish(fig, axes[0], path, SRC_ES.format("lfsi_emp_q; seasonally adjusted, quarterly"),
+    finish(fig, axes[0], path, SRC_ES.format(" (seasonally adjusted, quarterly)"),
            note="Ages 20-64. The shaded gap is unemployed people as a share of the whole population "
                 "aged 20-64, not the unemployment rate. Y-axis starts at 64%.")
 
@@ -625,7 +625,7 @@ def chart_youth(r: dict, path: Path):
     ax.set_xlabel(f"Young people aged 15-24, {YEAR} (%)")
     ax.legend(loc="lower right", fontsize=8.5)
     ax.set_title(f"Young people: the same unemployed, three denominators ({YEAR})", loc="left")
-    finish(fig, ax, path, SRC_ES.format("lfsa_pganws, edat_lfse_20; annual"),
+    finish(fig, ax, path, SRC_ES.format(" (annual)"),
            note="Students who look for work and could start count as unemployed. "
                 "The gap between the pink and grey bars is unemployed people in education or training.", offset=-36)
 
