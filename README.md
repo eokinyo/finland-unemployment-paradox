@@ -1,6 +1,6 @@
 # Finland tops the EU jobless table. Is it as bad as it looks?
 
-Code to reproduce the numbers, the comparison table and the charts for Elly Okinyo's article on Finland's unemployment rate and employment rate (October 2026, draft; not yet published).
+Code to reproduce the numbers, the comparison table and the charts for Elly Okinyo's article on Finland's unemployment rate and employment rate (October 2026; published at [ellyokinyo.com](https://ellyokinyo.com/writing/finland-unemployment-paradox-2026.html)).
 
 Finland has the highest unemployment rate in the EU, yet its employment rate is close to the EU average. The two rates use different denominators (the labour force against the whole population), and Finland has a large labour force share, including many students who look for work and count as unemployed. This repository fetches the public data behind that comparison.
 
