@@ -114,8 +114,8 @@ All accessed 7 October 2026. Eurostat API base: <https://ec.europa.eu/eurostat/a
 - Eurostat `edat_lfse_20`, Young people neither in employment nor in education and training by labour status (wstatus=UNE, training=NO_FE_NO_NFE, age=Y15-24): <https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_20/default/table>
 - Eurostat `edat_lfse_18`, Participation of young people in education and training by labour status (wstatus=EMP, age=Y15-24): <https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_18/default/table>
 - Statistics Finland, Labour Force Survey, release of 22 September 2026 (margin of error, trend figures): <https://stat.fi/en/publication/cmfp96le0a4mm07vyv0oyqv4n>
-- Statistics Finland, Labour Force Survey, table 135z, key indicators with seasonally adjusted and trend series, monthly: <https://pxdata.stat.fi/PxWeb/pxweb/en/StatFin/StatFin__tyti/statfin_tyti_pxt_135z.px/> (API: <https://pxdata.stat.fi/PxWeb/api/v1/en/StatFin/tyti/135z.px>)
-- Statistics Finland, Labour Force Survey, table 13am, young people (15-29) in education and the labour market, annual: <https://pxdata.stat.fi/PxWeb/pxweb/en/StatFin/StatFin__tyti/statfin_tyti_pxt_13am.px/> (API: <https://pxdata.stat.fi/PxWeb/api/v1/en/StatFin/tyti/13am.px>)
+- Statistics Finland, Labour Force Survey, table 135z, key indicators with seasonally adjusted and trend series, monthly: <https://pxdata.stat.fi/PxWeb/pxweb/en/StatFin/StatFin__tyti/135z.px/> (API: <https://pxdata.stat.fi/PxWeb/api/v1/en/StatFin/tyti/135z.px>)
+- Statistics Finland, Labour Force Survey, table 13am, young people (15-29) in education and the labour market, annual: <https://pxdata.stat.fi/PxWeb/pxweb/en/StatFin/StatFin__tyti/13am.px/> (API: <https://pxdata.stat.fi/PxWeb/api/v1/en/StatFin/tyti/13am.px>)
 - Eurostat euro indicators release, 1 October 2026 (used as a check on N1 and N2, and for the trend-series and revision notes): <https://ec.europa.eu/eurostat/web/products-euro-indicators/w/3-01102026-ap>
 
 ## License
